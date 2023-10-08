@@ -1,5 +1,6 @@
 import re
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def validar_expresion_regular(expresion):
     try:
@@ -40,12 +41,47 @@ def construir_AFND(expresion):
 
     return grafo
 
-def main():
-    expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
 
+def generarMandala():
+    grafo = nx.complete_graph(50)
+    grafo = nx.draw_circular(grafo, with_labels=True, node_size=50, node_color='r', font_color='w', font_size=20)
+    plt.axis('equal')
+    plt.show()
+ 
+def thompsonChar(caracter):
+    G = nx.DiGraph()
+    inicio = "q0"
+    final = "q1"
+    nodos = [["q0", caracter, "q1"]]
+    # Agregar estados al grafo
+
+    # Agregar transiciones
+    G.add_edge(inicio, final, label=caracter)
+
+    # Etiquetar el estado inicial
+    G.nodes[inicio]["initial"] = True
+
+    # Etiquetar los estados finales
+
+
+    # Dibujar el grafo
+    pos = nx.spring_layout(G, seed=42)  # Posición de los nodos
+    labels = nx.get_edge_attributes(G, 'label')
+    nx.draw(G, pos, with_labels=True, node_size=500, node_color="lightblue")
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+    plt.show()
+
+
+
+
+def main():
+    #expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
+    expresion = "a.b.c"
     if validar_expresion_regular(expresion):
         #print("La expresión regular es válida.")
-        print(construir_AFND(expresion))
+        #print(construir_AFND(expresion))
+        #thompsonChar("a")
+        generarMandala
     else:
         print("La expresión regular no es válida.")
 main()
