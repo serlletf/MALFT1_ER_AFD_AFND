@@ -1,52 +1,38 @@
-import re
-import networkx as nx
+def es_expresion_regular_valida(expresion):
+    def validar_expresion(expresion):
+        stack = []
 
-def validar_expresion_regular(expresion):
-    try:
-        re.compile(expresion)
+        for char in expresion:
+            if char == '(':
+                stack.append(char)
+            elif char == ')':
+                if not stack or stack.pop() != '(':
+                    return False
+
+        return len(stack) == 0
+
+    if validar_expresion(expresion):
+        i = 0
+        while i < len(expresion):
+            char = expresion[i]
+            if char == '*' or char == '|' or char == '.':
+                if i == 0 or i == len(expresion) - 1:
+                    return False
+                prev_char = expresion[i - 1]
+                next_char = expresion[i + 1]
+                if prev_char in ['*', '|', '.'] or next_char in ['*', '|', '.']:
+                    return False
+            i += 1
         return True
-    except re.error:
+    else:
         return False
 
-def construir_AFND(expresion):
-    grafo = nx.DiGraph()
-    pila = []
-
-    for caracter in expresion:
-        if caracter == '(':
-            pila.append(grafo.copy())
-            grafo = nx.DiGraph()
-        elif caracter == ')':
-            subgrafo = grafo
-            grafo = pila.pop()
-            grafo = nx.compose(grafo, subgrafo)
-        elif caracter == '|':
-            subgrafo = pila.pop()
-            pila.append(grafo.copy())
-            grafo = subgrafo
-        elif caracter == '*':
-            subgrafo = grafo.copy()
-            grafo.add_edge(0, 1, label='ε')
-            grafo.add_edge(1, 0, label='ε')
-            grafo.add_edge(0, 2, label='ε')
-            grafo.add_edge(2, 1, label='ε')
-            grafo.add_edge(2, 3, label='ε')
-            grafo.add_edge(3, 0, label='ε')
-            grafo = nx.compose(grafo, subgrafo)
-        else:
-            grafo.add_edge(0, 1, label=caracter)
-
-    grafo.add_node(2, accepting=True)  # Nodo de aceptación
-
-    return grafo
-
 def main():
-    expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
-
-    if validar_expresion_regular(expresion):
-        #print("La expresión regular es válida.")
-        print(construir_AFND(expresion))
+    expresion = input("Introduce una expresión regular: ")
+    if es_expresion_regular_valida(expresion):
+        print(f"'{expresion}' es una expresión regular válida.")
     else:
-        print("La expresión regular no es válida.")
-main()
+        print(f"'{expresion}' no es una expresión regular válida.")
 
+if __name__ == "__main__":
+    main()
