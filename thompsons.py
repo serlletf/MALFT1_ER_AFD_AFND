@@ -84,7 +84,10 @@ def parsear(expresion):
         if(caracter== "("):
             nuevaExpresion = capturar_parentesis(expresion)
             if th1== []:
-                th1 = nuevaExpresion #Aca se debe hacer una recursion en la nueva expresion
+                print("Nueva e: " ,nuevaExpresion)
+
+                th1 = parsear(nuevaExpresion)
+                print("TH1: " ,th1)
                 continue
             th2 = nuevaExpresion
             continue
@@ -92,6 +95,7 @@ def parsear(expresion):
             continue
         if(caracter=="."):
             th2 = obtenerTh2(expresion[i+1:])
+            print("TH2: " ,th2)
             #th1 = thompsonConcatenacion(th1, th2)
             continue
         if(caracter == "|"):
@@ -105,6 +109,20 @@ def parsear(expresion):
             continue
         th1.append(thompsonChar(caracter))
     return th1
+
+def crearOrdenOperaciones(expresion):
+    for i in range(len(expresion)):
+        caracter = expresion[i]
+        if(caracter== "("):
+            nuevaExpresion = capturar_parentesis(expresion)
+            if th1== []:
+                th1 = nuevaExpresion #Aca se debe hacer una recursion en la nueva expresion
+                continue
+            th2 = nuevaExpresion
+            continue
+        if(caracter== ")"):
+            continue
+    
 
 
 
