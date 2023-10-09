@@ -12,3 +12,6 @@ class Th:
     def agregarTransicion(self,nodo):
         self.transiciones.append(nodo)
         
+    def agregarInicioTransicion(self,nodo):
+        self.transiciones.insert(0,nodo)
+        

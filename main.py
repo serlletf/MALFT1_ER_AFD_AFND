@@ -65,13 +65,11 @@ def thompsonChar(caracter):
 
 
     # Dibujar el grafo
-    pos = nx.spring_layout(G, seed=42)  # Posición de los nodos
+    pos = nx(G, seed=42)  # Posición de los nodos
     labels = nx.get_edge_attributes(G, 'label')
     nx.draw(G, pos, with_labels=True, node_size=500, node_color="lightblue")
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
     plt.show()
-
-
 
 
 def main():
@@ -81,7 +79,7 @@ def main():
         #print("La expresión regular es válida.")
         #print(construir_AFND(expresion))
         #thompsonChar("a")
-        generarMandala
+        generarMandala()
     else:
         print("La expresión regular no es válida.")
 main()

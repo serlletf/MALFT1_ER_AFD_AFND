@@ -5,8 +5,11 @@ from visualizar import dibujar
 th = Th()
 operacion = ''
 getNUltimoNodo = lambda th=th: th.final
+getNPrimerNodo = lambda th=th: th.inicio
 
 nUltimoNodo = getNUltimoNodo()
+nPrimerNodo = getNUltimoNodo()
+
 
 def aumentarNUltimoNodo():
     global nUltimoNodo
@@ -17,6 +20,10 @@ def aumentarNUltimoNodo():
 def getNUltimoNodo():
     return nUltimoNodo
 
+def getNPrimerNodo():
+    return nPrimerNodo
+
+
 def thompsonChar(caracter):
     global th
     inicio = "q" + str(nUltimoNodo)
@@ -25,9 +32,10 @@ def thompsonChar(caracter):
     return 
     
 def thompsonVacio():
+    global th
     inicio = "q" + str(nUltimoNodo)
     final = "q" + str(aumentarNUltimoNodo())
-    return [inicio, "_", final]
+    th.agregarTransicion((inicio, "_", final))
 
 def thompsonConcatenacion(th2):
     global th
@@ -38,23 +46,47 @@ def thompsonConcatenacion(th2):
     th.agregarTransicion((q2, th2, q3))
     return 
 
-def thompsonO(th1, th2):
-    q0 = "q" + str(nUltimoNodo)
-    q1 = th1[0]
-    q2 = th1[len(th1)-1]
-    q3 = th2[0]
-    q4 = th2[len(th2)-1]
-    q5 = "q" + str(aumentarNUltimoNodo())
-    return [[q0, "_",q1],[q2,"_",q5],[q0, "_",q3],[q4,"_",q5]]
-
-def thompsonKleene(th):
-    q0 = "q" + str(nUltimoNodo)
-    q1 = "q" + str(aumentarNUltimoNodo())
-    q2 = "q" + str(aumentarNUltimoNodo())
-    q3 = "q" + str(aumentarNUltimoNodo())
+def thompsonO(th2):
+    global th
     
-    nodos = [q0, "_", q1,[q0, "_", q3], [q1, th, q2], [q2, "_", q1], [q2, "_", q3]]
-    return nodos
+    qith1 = "q" + str(th.inicio)
+    qfth1 = "q" + str(th.final)
+    qith2 = "q" + str(aumentarNUltimoNodo())
+    qfth2 = "q" + str(aumentarNUltimoNodo())
+    
+    nuevoInicio = aumentarNUltimoNodo()
+    qi = "q" + str(nuevoInicio)
+    qf = "q" + str(aumentarNUltimoNodo())
+
+    th.agregarInicioTransicion((qi,"_",qith1))
+    th.agregarInicioTransicion((qi,"_",qith2))
+    th.agregarTransicion((qith2,th2,qfth2))
+    th.agregarTransicion((qfth2,"_",qf))
+    th.agregarTransicion((qfth1,"_",qf))
+
+    th.inicio = nuevoInicio
+    
+    return 
+
+def thompsonKleene():
+    global th
+    qith1 = "q" + str(th.inicio)
+    qfth1 = "q" + str(th.final)
+    qith2 = "q" + str(aumentarNUltimoNodo())
+    qfth2 = "q" + str(aumentarNUltimoNodo())
+    
+    nuevoInicio = aumentarNUltimoNodo()
+    qi = "q" + str(nuevoInicio)
+    qf = "q" + str(aumentarNUltimoNodo())
+
+    th.agregarInicioTransicion((qi,"_",qith1))
+    th.agregarInicioTransicion((qi,"_",qith2))
+    th.agregarTransicion((qith2,"_",qfth2))
+    th.agregarTransicion((qfth2,"_",qf))
+    th.agregarTransicion((qfth1,"_",qf))
+    th.agregarTransicion((qfth1,"_",qith1))
+    
+    return
 
 def capturar_parentesis(expresion):
     grupo = []
@@ -71,29 +103,17 @@ def capturar_parentesis(expresion):
             grupo.append(caracter)
     return grupo
 
-def obtenerTh2(expresion):
-    th2 = []
-    for caracter in expresion:
-        if(caracter== "("):
-            continue
-        if (not(caracter.isalpha() or caracter.isdigit())):
-            return th2
-        th2.append(caracter)
-    return th2
-
-
-
 
 def operar(caracter):
     global th,operacion
     if (operacion == '.'):
         thompsonConcatenacion(caracter)
     if (operacion == '|'):
-        th = thompsonO(th, caracter)
-    if (operacion == '*'):
-        th = thompsonKleene(th)  
+        thompsonO(caracter)
+    """ if (operacion == '*'):
+        thompsonKleene() 
     if (operacion == '_'):
-        th = thompsonVacio()
+       thompsonVacio() """
     operacion = ''    
     return
 
@@ -108,19 +128,24 @@ def parsear(expresion):
     parsear(expresion[:-1])
     print("De vuelta para procesar de izquierda a derecha ", expresion)
     
+    #Va desde derecha a izquierda, para volver y operar recursivamente de izquierda a derecha
     caracter = expresion[len(expresion) - 1]
     
     #Si hay alguna operacion pendiente, se realiza con el thompson ya existente y el caracter actualmente por procesar
     if(operacion != ''):
         operar(caracter)
         return
-        
+    if(caracter == '*'):
+        thompsonKleene()
+        return
+    if(caracter == '_'):
+        thompsonVacio()
+        return
     #Si se procesa una letra o un numero se hace un thompson de un caracter    
     if(caracter.isalpha() or caracter.isdigit()):
         th.inicio = nUltimoNodo
         thompsonChar(caracter)
         return 
-    
     #Como no es un caracter ni un numero, se asume que es una operacion y se agrega como operacion pendiente
     operacion = caracter
     return
@@ -135,12 +160,13 @@ def toList(expresion):
 
 def main():
     global th
-    expresion = "a.b.c"
+    expresion = "a|b|c.d"
     parsear(list(expresion))
     
     afnd = th.transiciones
     print(afnd)
-    
+    vs = dibujar()
+    vs.visualizar(afnd)
     
     
     
