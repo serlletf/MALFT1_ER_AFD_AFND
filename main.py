@@ -2,29 +2,11 @@ import re
 import networkx as nx
 import matplotlib.pyplot as plt
 
-        for char in expresion:
-            if char == '(':
-                stack.append(char)
-            elif char == ')':
-                if not stack or stack.pop() != '(':
-                    return False
-
-        return len(stack) == 0
-
-    if validar_expresion(expresion):
-        i = 0
-        while i < len(expresion):
-            char = expresion[i]
-            if char == '*' or char == '|' or char == '.':
-                if i == 0 or i == len(expresion) - 1:
-                    return False
-                prev_char = expresion[i - 1]
-                next_char = expresion[i + 1]
-                if prev_char in ['*', '|', '.'] or next_char in ['*', '|', '.']:
-                    return False
-            i += 1
+def validar_expresion_regular(expresion):
+    try:
+        re.compile(expresion)
         return True
-    else:
+    except re.error:
         return False
 
 def construir_AFND(expresion):
@@ -99,7 +81,5 @@ def main():
         #thompsonChar("a")
         generarMandala()
     else:
-        print(f"'{expresion}' no es una expresión regular válida.")
-
-if __name__ == "__main__":
-    main()
+        print("La expresión regular no es válida.")
+main()
