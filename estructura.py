@@ -3,10 +3,11 @@ nodoCount = 0
 #las transiciones de los nodos se guardan en formato de listas
 #ej: nodo1.transicion = [["_", nodo2], ["a", nodo3]]
 class Nodo:
-    def __init__(self, id):
+    def __init__(self):
+        global nodoCount
         self.transicion = []
-        self.id = id
-
+        self.id = nodoCount
+        nodoCount += 1
 
 #inicio y final son nodos de clase Nodo, valor por defecto en None
 class Th:
@@ -24,14 +25,10 @@ class Th:
     #retorna un nuevo thompson
     def th_o(self, th_sgte):
         nuevoTh = Th()
-        global nodoCount
 
         #nuevos nodos
-        nuevoTh.inicio = Nodo(nodoCount)
-        nodoCount += 1
-
-        nuevoTh.final = Nodo(nodoCount)
-        nodoCount += 1
+        nuevoTh.inicio = Nodo()
+        nuevoTh.final = Nodo()
 
         #transiciones de los nodos
 
@@ -61,14 +58,10 @@ class Th:
 
     def th_kleene(self):
         nuevoTh = Th()
-        global nodoCount
 
         #nuevos nodos
-        nuevoTh.inicio = Nodo(nodoCount)
-        nodoCount += 1
-
-        nuevoTh.final = Nodo(nodoCount)
-        nodoCount += 1
+        nuevoTh.inicio = Nodo()
+        nuevoTh.final = Nodo()
 
         #transiciones de los nodos
 
