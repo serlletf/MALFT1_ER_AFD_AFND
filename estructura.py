@@ -8,10 +8,11 @@ class Nodo:
         self.id = id
 
 
+#inicio y final son nodos de clase Nodo, valor por defecto en None
 class Th:
     def __init__(self):
-        self.inicio = 0
-        self.final = 0
+        self.inicio = None
+        self.final = None
         self.transiciones = []
         
     def agregarTransicion(self,nodo):
