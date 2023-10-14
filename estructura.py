@@ -47,7 +47,6 @@ class Th:
         #concatenacion no crea nodos, solo transiciones
 
         #nueva transicion epsilon
-        self.final = th_sgte.inicio
         self.final.transicion.append(["_", th_sgte.inicio])
 
         #inicio y final del nuevo thompson
