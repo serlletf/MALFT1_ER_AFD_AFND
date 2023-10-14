@@ -16,11 +16,11 @@ class Th:
         self.final = None
         self.transiciones = []
         
-    def agregarTransicion(self,nodo):
+    def agregarTransicion(self, nodo):
         self.transiciones.append(nodo)
         
-    def agregarInicioTransicion(self,nodo):
-        self.transiciones.insert(0,nodo)
+    def agregarInicioTransicion(self, nodo):
+        self.transiciones.insert(0, nodo)
 
     #retorna un nuevo thompson
     def th_o(self, th_sgte):
@@ -33,12 +33,12 @@ class Th:
         #transiciones de los nodos
 
         #transiciones del nuevo inicio
-        nuevoTh.inicio.transicion.append("_", self.inicio)
+        nuevoTh.inicio.transicion.append(["_", self.inicio])
         nuevoTh.inicio.transicion.append(["_", th_sgte.inicio])
 
         #transiciones hacia el nuevo final
         self.final.transicion.append(["_", nuevoTh.final])
-        th_sgte.final.transicion.append("_", nuevoTh.final)
+        th_sgte.final.transicion.append(["_", nuevoTh.final])
 
         return nuevoTh
 
