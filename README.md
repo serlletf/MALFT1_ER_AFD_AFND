@@ -5,5 +5,5 @@ Librerias necesarias: networkx y matplotlib
 
 Para instalar las librerias:
 En una concola ejecutar:
-pip instal networkx
-pip instal matplotlib
+pip install networkx
+pip install matplotlib
