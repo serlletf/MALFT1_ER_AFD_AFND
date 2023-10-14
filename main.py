@@ -73,6 +73,52 @@ def thompsonChar(caracter):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
     plt.show()
 
+    #AFD
+def construir_afd(tabla_delta, estados_aceptacion):
+    afd = {}  # El AFD se representará como un diccionario de diccionarios
+    
+    # Extraer los estados y el alfabeto de la tabla delta
+    estados = list(set(estado for estado, _ in tabla_delta))
+    alfabeto = list(set(simbolo for _, simbolo in tabla_delta if simbolo != "ε"))
+
+    # Inicializar el AFD
+    for estado in estados:
+        afd[estado] = {}
+
+    # Construir el AFD a partir de la tabla delta
+    for estado, simbolo, estado_destino in tabla_delta:
+        if simbolo != "ε":
+            afd[estado][simbolo] = estado_destino
+
+    # Establecer los estados de aceptación
+    estados_aceptacion = set(estados_aceptacion)
+    
+    # Devolver el AFD
+    return afd, estados_aceptacion
+
+"""Ejemplo de uso
+tabla_delta = [
+   ("q0", "a", "q1"),
+    ("q0", "b", "q2"),
+    ("q1", "a", "q2"),
+    ("q1", "b", "q3"),
+    ("q2", "a", "q1"),
+    ("q2", "b", "q0"),
+    ("q3", "a", "q3"),
+    ("q3", "b", "q2")
+]
+
+estados_aceptacion = ["q0", "q3"]
+
+afd, estados_aceptacion = construir_afd(tabla_delta, estados_aceptacion)
+
+# Imprimir el AFD resultante
+print("AFD:")
+for estado, transiciones in afd.items():
+    print(f"Estado {estado}: {transiciones}")
+
+print("Estados de Aceptación:", estados_aceptacion)"""
+
 
 def main():
     #expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
@@ -85,4 +131,3 @@ def main():
     else:
         print("La expresión regular no es válida.")
 main()
-
