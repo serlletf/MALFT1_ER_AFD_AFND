@@ -1,9 +1,10 @@
-from estructura import Th
+from estructura import Th,Nodo
+from afd import AFD
 from visualizar import dibujar
 
 
 th = Th()
-operacion = ''
+operacion = ""
 getNUltimoNodo = lambda th=th: th.final
 getNPrimerNodo = lambda th=th: th.inicio
 
@@ -23,6 +24,23 @@ def getNUltimoNodo():
 def getNPrimerNodo():
     return nPrimerNodo
 
+
+def armarNodos():
+    global th
+    nodos = []
+    for inicio, etiqueta, destino in th.transiciones:
+        if (inicio not in nodos):
+            nodos.append(inicio)
+            nodo = Nodo()
+            nodo.nombre = inicio
+            th.nodos.append(nodo)
+        if (destino not in nodos):
+            nodos.append(destino)
+            nodo = Nodo()
+            nodo.nombre = destino
+            th.nodos.append(nodo)
+        
+    return
 
 def thompsonChar(caracter):
     global th
@@ -118,7 +136,10 @@ def operar(caracter):
     return
 
 
+#Primero debe analizar los parentesis, luego concatenación, despues el | y luego kleene
+
 def parsear(expresion):
+    
     global th,operacion
     print("Asi va ",expresion, "Largo ", len(expresion))
     
@@ -158,17 +179,24 @@ def toList(expresion):
         lista.append(caracter)
     return lista
 
+def visualizar(afnd):
+    vs = dibujar()
+    vs.visualizar(afnd)
+    
 def main():
     global th
-    expresion = "a|b|c.d"
+    expresion = "a|b"
     parsear(list(expresion))
     
     afnd = th.transiciones
     print(afnd)
-    vs = dibujar()
-    vs.visualizar(afnd)
+    
+    armarNodos()
+    visualizar(afnd)
     
     
+    afd = AFD(th)
+    afd.armarUniones()
     
     
 main()

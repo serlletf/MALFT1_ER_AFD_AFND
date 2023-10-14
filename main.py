@@ -8,7 +8,9 @@ def validar_expresion_regular(expresion):
         return True
     except re.error:
         return False
-
+    
+    
+    
 def construir_AFND(expresion):
     grafo = nx.DiGraph()
     pila = []
@@ -44,7 +46,7 @@ def construir_AFND(expresion):
 
 def generarMandala():
     grafo = nx.complete_graph(50)
-    grafo = nx.draw_circular(grafo, with_labels=True, node_size=50, node_color='r', font_color='w', font_size=20)
+    grafo = nx.draw_circular(grafo, node_size=50, node_color='black', font_color='w', font_size=20)
     plt.axis('equal')
     plt.show()
  
