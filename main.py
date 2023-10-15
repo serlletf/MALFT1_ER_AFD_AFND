@@ -120,6 +120,28 @@ for estado, transiciones in afd.items():
 print("Estados de Aceptación:", estados_aceptacion)"""
 
 
+def testAFNDToAFD():
+    tabla_delta = [
+   ("q0", "a", "q1"),
+    ("q0", "b", "q2"),
+    ("q1", "a", "q2"),
+    ("q1", "b", "q3"),
+    ("q2", "a", "q1"),
+    ("q2", "b", "q0"),
+    ("q3", "a", "q3"),
+    ("q3", "b", "q2")
+]
+    estados_aceptacion = ["q4", "q5"]
+
+    afd, estados_aceptacion = construir_afd(tabla_delta, estados_aceptacion)
+
+    # Imprimir el AFD resultante
+    print("AFD:")
+    for estado, transiciones in afd.items():
+        print(f"Estado {estado}: {transiciones}")
+
+    print("Estados de Aceptación:", estados_aceptacion)
+
 def main():
     #expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
     expresion = "a.b.c"
@@ -127,7 +149,8 @@ def main():
         #print("La expresión regular es válida.")
         #print(construir_AFND(expresion))
         #thompsonChar("a")
-        generarMandala()
+        #generarMandala()
+        testAFNDToAFD()
     else:
         print("La expresión regular no es válida.")
 main()

@@ -172,6 +172,13 @@ def parsear(expresion):
     return
      
 
+def determinarAlfabeto(expresion):
+    alfabeto = []
+    for caracter in expresion:
+        if(caracter.isalpha() or caracter.isdigit()):
+            if(caracter not in alfabeto):
+                alfabeto.append(caracter)
+    return alfabeto
 
 def toList(expresion):
     lista = []
@@ -187,8 +194,9 @@ def main():
     global th
     expresion = "a|b"
     parsear(list(expresion))
-    
+    th.alfabeto = determinarAlfabeto(expresion)
     afnd = th.transiciones
+
     print(afnd)
     
     armarNodos()
@@ -196,7 +204,7 @@ def main():
     
     
     afd = AFD(th)
-    afd.armarUniones()
+    afd.AFNDToAFD()
     
     
 main()
