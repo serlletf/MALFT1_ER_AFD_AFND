@@ -2,7 +2,7 @@ from estructura import Th
 from estructura import Nodo
 from visualizar import dibujar
 
-
+'''
 th = Th()
 operacion = ''
 getNUltimoNodo = lambda th=th: th.final
@@ -152,12 +152,12 @@ def parsear(expresion):
     return
      
 
-
 def toList(expresion):
     lista = []
     for caracter in expresion:
         lista.append(caracter)
     return lista
+'''
 
 def th_caracter(caracter):
     nuevoTh = Th()
@@ -169,6 +169,7 @@ def th_caracter(caracter):
     return nuevoTh
 
 def main():
+    """
     global th
     expresion = "a|b|c.d"
     parsear(list(expresion))
@@ -177,7 +178,7 @@ def main():
     print(afnd)
     vs = dibujar()
     vs.visualizar(afnd)
-    
+    """
     
     
     
