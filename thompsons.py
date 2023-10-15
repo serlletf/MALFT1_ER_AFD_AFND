@@ -1,4 +1,5 @@
 from estructura import Th
+from estructura import Nodo
 from visualizar import dibujar
 
 
@@ -157,6 +158,15 @@ def toList(expresion):
     for caracter in expresion:
         lista.append(caracter)
     return lista
+
+def th_caracter(caracter):
+    nuevoTh = Th()
+    nuevoTh.incio = Nodo()
+    nuevoTh.final = Nodo()
+
+    nuevoTh.incio.transicion.append([caracter, nuevoTh.final])
+
+    return nuevoTh
 
 def main():
     global th
