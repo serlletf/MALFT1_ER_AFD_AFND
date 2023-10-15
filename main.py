@@ -2,13 +2,34 @@ import re
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def validar_expresion_regular(expresion):
-    try:
-        re.compile(expresion)
+def es_expresion_regular_valida(expresion):
+    def validar_expresion(expresion):
+        stack = []
+
+        for char in expresion:
+            if char == '(':
+                stack.append(char)
+            elif char == ')':
+                if not stack or stack.pop() != '(':
+                    return False
+
+        return len(stack) == 0
+
+    if validar_expresion(expresion):
+        i = 0
+        while i < len(expresion):
+            char = expresion[i]
+            if char == '*' or char == '|' or char == '.':
+                if i == 0 or i == len(expresion) - 1:
+                    return False
+                prev_char = expresion[i - 1]
+                next_char = expresion[i + 1]
+                if prev_char in ['*', '|', '.'] or next_char in ['*', '|', '.']:
+                    return False
+            i += 1
         return True
-    except re.error:
+    else:
         return False
-    
     
     
 def construir_AFND(expresion):
@@ -78,8 +99,8 @@ def construir_afd(tabla_delta, estados_aceptacion):
     afd = {}  # El AFD se representará como un diccionario de diccionarios
     
     # Extraer los estados y el alfabeto de la tabla delta
-    estados = list(set(estado for estado, _ in tabla_delta))
-    alfabeto = list(set(simbolo for _, simbolo in tabla_delta if simbolo != "ε"))
+    estados = list(set(estado for estado, _, _ in tabla_delta))
+    alfabeto = list(set(simbolo for _, simbolo, _ in tabla_delta if simbolo != "ε"))
 
     # Inicializar el AFD
     for estado in estados:
@@ -96,28 +117,6 @@ def construir_afd(tabla_delta, estados_aceptacion):
     # Devolver el AFD
     return afd, estados_aceptacion
 
-"""Ejemplo de uso
-tabla_delta = [
-   ("q0", "a", "q1"),
-    ("q0", "b", "q2"),
-    ("q1", "a", "q2"),
-    ("q1", "b", "q3"),
-    ("q2", "a", "q1"),
-    ("q2", "b", "q0"),
-    ("q3", "a", "q3"),
-    ("q3", "b", "q2")
-]
-
-estados_aceptacion = ["q0", "q3"]
-
-afd, estados_aceptacion = construir_afd(tabla_delta, estados_aceptacion)
-
-# Imprimir el AFD resultante
-print("AFD:")
-for estado, transiciones in afd.items():
-    print(f"Estado {estado}: {transiciones}")
-
-print("Estados de Aceptación:", estados_aceptacion)"""
 
 
 def testAFNDToAFD():
@@ -140,12 +139,12 @@ def testAFNDToAFD():
     for estado, transiciones in afd.items():
         print(f"Estado {estado}: {transiciones}")
 
-    print("Estados de Aceptación:", estados_aceptacion)
+    print("Estados de Aceptacion:", estados_aceptacion)
 
 def main():
     #expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
     expresion = "a.b.c"
-    if validar_expresion_regular(expresion):
+    if es_expresion_regular_valida(expresion):
         #print("La expresión regular es válida.")
         #print(construir_AFND(expresion))
         #thompsonChar("a")
