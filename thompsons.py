@@ -1,5 +1,5 @@
 from estructura import Th,Nodo
-from afd import AFD
+from afd import crearAFD
 from visualizar import dibujar
 
 
@@ -186,9 +186,13 @@ def toList(expresion):
         lista.append(caracter)
     return lista
 
-def visualizar(afnd):
+def visualizarAFND(afnd):
     vs = dibujar()
     vs.visualizar(afnd)
+    
+def visualizarAFD(afd, nodosFinales):
+    vs = dibujar()
+    vs.visualizarAFD(afd, nodosFinales)
     
 def main():
     global th
@@ -200,11 +204,14 @@ def main():
     print(afnd)
     
     armarNodos()
-    visualizar(afnd)
+    visualizarAFND(afnd)
     
     
-    afd = AFD(th)
+    afd = crearAFD(th)
     afd.AFNDToAFD()
+
+    visualizarAFD(afd.transiciones, afd.nodosFinales)
+
     
     
 main()

@@ -1,19 +1,25 @@
-from estructura import Th,Nodo
+from estructura import Th,AFD,Nodo, NodoAFD
 
 
-class AFD:
+class crearAFD:
     afnd = Th()
+    afn = AFD()
     nodosArecorrer = []
     nuevosNodos = []
 
 
     def __init__(self, afnd):
         self.afnd = afnd
+        self.transiciones = []
+        self.transicionesParaVisualizar = []
+        self.nodosFinales = []
 
     def AFNDToAFD(self):
         self.armarUniones()
         nodosAFD,transicionesAlfabeto = self.crearTabla()
         self.verTabla(nodosAFD,transicionesAlfabeto)
+        self.construirAFD(nodosAFD,transicionesAlfabeto)
+        self.formalizar()
         
         return
     
@@ -150,9 +156,66 @@ class AFD:
         print("Nodos del afnd ", nodosAfd)  
 
                                 
-        
+    def construirAFD(self,nodosAfd,matrizEstadosAlfabeto):
+        print("Comienza la creación del AFD \n")
 
-""" def convertir_afnd_a_afd(tabla_transiciones_afnd, estados_iniciales_afnd):
+        afd = self.afn
+        alfabeto = self.afnd.alfabeto
+        #Crear nodos del AFD
+        for nodoAfd in nodosAfd:
+            nodo = NodoAFD()
+
+            #nodo.nombre = {"nombre" : "q" + str(nodosAfd.index(nodoAfd)), "grupoNodos" : nodoAfd}
+            nodo.nombre = "q" + str(nodosAfd.index(nodoAfd))
+            nodo.grupoNodos = nodoAfd
+            if("q" + str(self.afnd.final) in nodo.grupoNodos):
+                nodo.esFinal = True
+            afd.nodos.append(nodo)
+            
+        #print(matrizEstadosAlfabeto)
+        
+        """ for nodos in afd.nodos:
+            print("Nombre",nodos.nombre)
+            print("Grupo" ,nodos.grupoNodos)   """
+
+        #for filaTransicion in matrizEstadosAlfabeto:
+        for i in range(len(matrizEstadosAlfabeto)):
+            #indexEnAlfabeto = matrizEstadosAlfabeto.index(filaTransicion)
+            filaTransicionI= matrizEstadosAlfabeto[i]
+            #for nodosEnFila in filaTransicion:
+            for j in range(len(filaTransicionI)):
+                nodosEnFilaJ = filaTransicionI[j]
+                #print("nodos en fila j"  ,nodosEnFilaJ)
+                
+                nodoOrigen = afd.nodos[j]
+                #print("Nodo origen: ", nodoOrigen.nombre)
+
+                nodoDestino = afd.devolverNodoPorGrupo(nodosEnFilaJ)
+                #Sumidero
+                if(nodoDestino == None):
+                    #print("Pal sumidero")
+                    nodoDestino = "Sumidero"
+                else:
+                    nodoDestino = nodoDestino.nombre
+
+                valor = alfabeto[i]
+                afd.transiciones.append((nodoOrigen.nombre,valor,nodoDestino))
+                
+                #print("Nodo origen: ", nodoOrigen.nombre, "Valor: ", valor, "Nodo destino: ", nodoDestino)
+                
+        print("Transiciones: ")       
+        print(afd.transiciones)
+        self.afn = afd
+        self.transiciones = afd.transiciones
+
+    def formalizar(self):
+        for nodo in self.afn.nodos:
+            if(nodo.esFinal):
+                self.nodosFinales.append(nodo.nombre)
+                 
+         
+"""
+def convertir_afnd_a_afd(tabla_transiciones_afnd, estados_iniciales_afnd):
     estados_afd = set()
     estados_afd.add(estados_iniciales_afnd)
     alfabeto_afd = set()
@@ -184,4 +247,5 @@ class AFD:
                 if destino not in estados_afd:
                     cola.append(destino)
 
-    return estados_afd, alfabeto_afd, transiciones_afd """
+    return estados_afd, alfabeto_afd, transiciones_afd
+ """
