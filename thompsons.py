@@ -186,9 +186,13 @@ def toList(expresion):
         lista.append(caracter)
     return lista
 
-def visualizar(afnd):
+def visualizarAFND(afnd):
     vs = dibujar()
     vs.visualizar(afnd)
+    
+def visualizarAFD(afd, nodosFinales):
+    vs = dibujar()
+    vs.visualizarAFD(afd, nodosFinales)
     
 def main():
     global th
@@ -200,13 +204,13 @@ def main():
     print(afnd)
     
     armarNodos()
-    visualizar(afnd)
+    visualizarAFND(afnd)
     
     
     afd = crearAFD(th)
     afd.AFNDToAFD()
 
-    visualizar(afd.transiciones)
+    visualizarAFD(afd.transiciones, afd.nodosFinales)
 
     
     

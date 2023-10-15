@@ -31,6 +31,7 @@ class AFD:
         self.nodos = []
         self.transiciones = []
         
+        
     def devolverNodoPorGrupo(self, grupo):
         for nodo in self.nodos:
             if(nodo.grupoNodos == grupo):
@@ -44,6 +45,8 @@ class NodoAFD:
     def __init__(self):
         self.nombre = []
         self.grupoNodos = []
+        self.esFinal = False
+
     def retornarNodo(self, nombre):
         for nodo in self.nodos:
             if(nodo.nombre == nombre):

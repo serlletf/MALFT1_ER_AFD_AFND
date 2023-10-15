@@ -3,6 +3,7 @@ from estructura import Th,AFD,Nodo, NodoAFD
 
 class crearAFD:
     afnd = Th()
+    afn = AFD()
     nodosArecorrer = []
     nuevosNodos = []
 
@@ -10,12 +11,15 @@ class crearAFD:
     def __init__(self, afnd):
         self.afnd = afnd
         self.transiciones = []
+        self.transicionesParaVisualizar = []
+        self.nodosFinales = []
 
     def AFNDToAFD(self):
         self.armarUniones()
         nodosAFD,transicionesAlfabeto = self.crearTabla()
         self.verTabla(nodosAFD,transicionesAlfabeto)
         self.construirAFD(nodosAFD,transicionesAlfabeto)
+        self.formalizar()
         
         return
     
@@ -155,7 +159,7 @@ class crearAFD:
     def construirAFD(self,nodosAfd,matrizEstadosAlfabeto):
         print("Comienza la creación del AFD \n")
 
-        afd = AFD()
+        afd = self.afn
         alfabeto = self.afnd.alfabeto
         #Crear nodos del AFD
         for nodoAfd in nodosAfd:
@@ -164,9 +168,11 @@ class crearAFD:
             #nodo.nombre = {"nombre" : "q" + str(nodosAfd.index(nodoAfd)), "grupoNodos" : nodoAfd}
             nodo.nombre = "q" + str(nodosAfd.index(nodoAfd))
             nodo.grupoNodos = nodoAfd
+            if("q" + str(self.afnd.final) in nodo.grupoNodos):
+                nodo.esFinal = True
             afd.nodos.append(nodo)
             
-        print(matrizEstadosAlfabeto)
+        #print(matrizEstadosAlfabeto)
         
         """ for nodos in afd.nodos:
             print("Nombre",nodos.nombre)
@@ -197,11 +203,18 @@ class crearAFD:
                 
                 #print("Nodo origen: ", nodoOrigen.nombre, "Valor: ", valor, "Nodo destino: ", nodoDestino)
                 
-                
+        print("Transiciones: ")       
         print(afd.transiciones)
+        self.afn = afd
         self.transiciones = afd.transiciones
 
-""" 
+    def formalizar(self):
+        for nodo in self.afn.nodos:
+            if(nodo.esFinal):
+                self.nodosFinales.append(nodo.nombre)
+                 
+         
+"""
 def convertir_afnd_a_afd(tabla_transiciones_afnd, estados_iniciales_afnd):
     estados_afd = set()
     estados_afd.add(estados_iniciales_afnd)
