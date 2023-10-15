@@ -1,5 +1,5 @@
 from estructura import Th,Nodo
-from afd import AFD
+from afd import crearAFD
 from visualizar import dibujar
 
 
@@ -203,8 +203,11 @@ def main():
     visualizar(afnd)
     
     
-    afd = AFD(th)
+    afd = crearAFD(th)
     afd.AFNDToAFD()
+
+    visualizar(afd.transiciones)
+
     
     
 main()

@@ -26,5 +26,26 @@ class Th:
         for nodo in self.nodos:
             if(nodo.nombre == nombre):
                 return nodo
+class AFD:
+    def __init__(self):
+        self.nodos = []
+        self.transiciones = []
         
+    def devolverNodoPorGrupo(self, grupo):
+        for nodo in self.nodos:
+            if(nodo.grupoNodos == grupo):
+                return nodo
+    def devolverNodoPorNombre(self, nombre):
+        for nodo in self.nodos:
+            if(nodo.nombre == nombre):
+                return nodo
+
+class NodoAFD:
+    def __init__(self):
+        self.nombre = []
+        self.grupoNodos = []
+    def retornarNodo(self, nombre):
+        for nodo in self.nodos:
+            if(nodo.nombre == nombre):
+                return nodo
     
