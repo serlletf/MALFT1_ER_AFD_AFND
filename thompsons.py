@@ -159,12 +159,21 @@ def toList(expresion):
     return lista
 '''
 
-def th_caracter(caracter):
-    nuevoTh = Th()
-    nuevoTh.incio = Nodo()
-    nuevoTh.final = Nodo()
+def recorrer_th(nodoInicio, nodosRecorridos=[]):
+    nodoI = nodoInicio
+    nodosRecorridos.append(nodoI.id)
 
-    nuevoTh.incio.transicion.append([caracter, nuevoTh.final])
+    print("nodo " + str(nodoI.id))
+    for t in nodoI.transicion:
+        print("tiene transicion: " + t[0] + " hacia " + str(t[1].id))
+    for t in nodoI.transicion:
+        if t[1].id not in nodosRecorridos:
+            recorrer_th(t[1], nodosRecorridos)
+
+def th_caracter(caracter):
+    nuevoTh = Th(Nodo(), Nodo())
+
+    nuevoTh.inicio.transicion.append([caracter, nuevoTh.final])
 
     return nuevoTh
 
@@ -179,7 +188,11 @@ def main():
     vs = dibujar()
     vs.visualizar(afnd)
     """
-    
-    
-    
+
+    th1 = th_caracter("a")
+    th2 = th_caracter("b")
+    th3 = th1.th_concat(th2)
+    recorrer_th(th3.inicio)
+
+
 main()

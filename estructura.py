@@ -11,9 +11,9 @@ class Nodo:
 
 #inicio y final son nodos de clase Nodo, valor por defecto en None
 class Th:
-    def __init__(self):
-        self.inicio = None
-        self.final = None
+    def __init__(self, inicio, final):
+        self.inicio = inicio
+        self.final = final
         #self.transiciones = []
 
 
@@ -25,11 +25,7 @@ class Th:
 
     #retorna un nuevo thompson
     def th_o(self, th_sgte):
-        nuevoTh = Th()
-
-        #nuevos nodos
-        nuevoTh.inicio = Nodo()
-        nuevoTh.final = Nodo()
+        nuevoTh = Th(Nodo(), Nodo())
 
         #transiciones de los nodos
 
@@ -44,27 +40,19 @@ class Th:
         return nuevoTh
 
     def th_concat(self, th_sgte):
-        nuevoTh = Th()
         #concatenacion no crea nodos, solo transiciones
-
         #nueva transicion epsilon
         self.final.transicion.append(["_", th_sgte.inicio])
 
         #inicio y final del nuevo thompson
-        nuevoTh.inicio = self.inicio
-        nuevoTh.final = th_sgte.final
+        nuevoTh = Th(self.inicio, th_sgte.final)
 
         return nuevoTh
 
     def th_kleene(self):
-        nuevoTh = Th()
-
-        #nuevos nodos
-        nuevoTh.inicio = Nodo()
-        nuevoTh.final = Nodo()
+        nuevoTh = Th(Nodo(), Nodo())
 
         #transiciones de los nodos
-
         #transiciones del nuevo inicio
         nuevoTh.inicio.transicion.append(["_", self.inicio])
         nuevoTh.inicio.transicion.append(["_", nuevoTh.final])
