@@ -14,13 +14,14 @@ class Th:
     def __init__(self):
         self.inicio = None
         self.final = None
-        self.transiciones = []
+        #self.transiciones = []
+
+
+    #def agregarTransicion(self, nodo):
+    #    self.transiciones.append(nodo)
         
-    def agregarTransicion(self, nodo):
-        self.transiciones.append(nodo)
-        
-    def agregarInicioTransicion(self, nodo):
-        self.transiciones.insert(0, nodo)
+    #def agregarInicioTransicion(self, nodo):
+    #    self.transiciones.insert(0, nodo)
 
     #retorna un nuevo thompson
     def th_o(self, th_sgte):
