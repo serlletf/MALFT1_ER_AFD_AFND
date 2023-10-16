@@ -169,6 +169,7 @@ def recorrer_th(nodoInicio, nodosRecorridos=[]):
     for t in nodoI.transicion:
         if t[1].id not in nodosRecorridos:
             recorrer_th(t[1], nodosRecorridos)
+    pass
 
 def th_caracter(caracter):
     nuevoTh = Th(Nodo(), Nodo())
@@ -176,6 +177,69 @@ def th_caracter(caracter):
     nuevoTh.inicio.transicion.append([caracter, nuevoTh.final])
 
     return nuevoTh
+
+def iterar_cadena(cadena):
+    s = ""
+    s.isalnum()
+    mainTh = None
+    thAux = None
+    debeConcatenar = False
+
+    i = 0
+    while i < len(cadena):
+
+        if cadena[i].isalnum() or cadena[i] == "_":
+            #si es caracter
+
+            thAux = th_caracter(cadena[i])
+
+            if debeConcatenar and ((i == len(cadena)-1) or (i+1 < len(cadena) and cadena[i+1] != "*")):
+                #se debe concatenar y no sigue inmediatamente *
+                mainTh = mainTh.th_concat(thAux)
+                debeConcatenar = False
+
+        elif cadena[i] == "*":
+            #si es kleene
+            thAux = thAux.th_kleene()
+            if debeConcatenar:
+                mainTh = mainTh.th_concat(thAux)
+                debeConcatenar = False
+
+        elif cadena[i] == ".":
+            #si se debe concatenar
+            debeConcatenar = True
+
+        elif cadena[i] == "|":
+            #si se debe realizar un o
+            """
+            finRecurs = i+1 + cadena[i+1:].find("|")
+            if finRecurs < 0:
+                finRecurs = len(cadena)
+            """
+            finRecurs = len(cadena)
+            mainTh = mainTh.th_o(iterar_cadena(cadena[i+1:finRecurs]))
+            i = finRecurs
+
+        elif cadena[i] == "(":
+            #se detecta un parentesis
+            pass
+
+        if mainTh == None:
+            mainTh = thAux
+
+        i += 1
+    return mainTh
+
+def formalizar_afnd(nodoInicio, nodosRecorridos = [], l = []):
+    nodoI = nodoInicio
+    nodosRecorridos.append(nodoI.id)
+
+    for t in nodoI.transicion:
+        l.append((str(nodoI.id), t[0], str(t[1].id)))
+    for t in nodoI.transicion:
+        if t[1].id not in nodosRecorridos:
+            formalizar_afnd(t[1], nodosRecorridos, l)
+    return l
 
 def main():
     """
@@ -189,10 +253,19 @@ def main():
     vs.visualizar(afnd)
     """
 
+    #prueba funcionamiento de estructura y recorrer_th()
+    """
     th1 = th_caracter("a")
     th2 = th_caracter("b")
-    th3 = th1.th_concat(th2)
+    th3 = (th1.th_o(th2)).th_kleene()
     recorrer_th(th3.inicio)
+    """
 
+    #prueba iterar_cadena() sin parentesis
+    afnd = iterar_cadena("a.a|b.d|c*").inicio
+    recorrer_th(afnd)
+    print("formalizacion: "+str(formalizar_afnd(afnd)))
+    dibujar().visualizar(formalizar_afnd(afnd))
+    pass
 
 main()
