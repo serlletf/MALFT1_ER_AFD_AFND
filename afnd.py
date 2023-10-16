@@ -198,11 +198,11 @@ def formalizarAFND():
 
     for nodo in th.nodos:
         nodosNombre.append(nodo.nombre)
-    print("AFND= \nK = " , nodosNombre)
-    print("\nΣ = " , th.alfabeto)
-    print("\ns = " , "q"+str(th.inicio))
-    print("\nf = " , "q"+str(th.final))
+    print("AFND M: \nK = " , nodosNombre)
+    print("\nSigma = " , th.alfabeto)
     print("\nDelta = " , th.transiciones)
+    print("\ns = " , "q"+str(th.inicio))
+    print("\nF = " , "q"+str(th.final))
     
 
 def main():
