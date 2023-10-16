@@ -3,7 +3,7 @@ from estructura import Th,AFD,Nodo, NodoAFD
 
 class crearAFD:
     afnd = Th()
-    afn = AFD()
+    afd = AFD()
     nodosArecorrer = []
     nuevosNodos = []
 
@@ -159,7 +159,7 @@ class crearAFD:
     def construirAFD(self,nodosAfd,matrizEstadosAlfabeto):
         print("Comienza la creación del AFD \n")
 
-        afd = self.afn
+        afd = self.afd
         alfabeto = self.afnd.alfabeto
         #Crear nodos del AFD
         for nodoAfd in nodosAfd:
@@ -208,12 +208,34 @@ class crearAFD:
         self.afn = afd
         self.transiciones = afd.transiciones
 
+    def sumidero(self):
+        for caracter in self.afn.alfabeto:
+            self.afn.transiciones.append(("Sumidero",caracter,"Sumidero")) 
+         
     def formalizar(self):
+        #Formalizar de nodos finales
         for nodo in self.afn.nodos:
             if(nodo.esFinal):
                 self.nodosFinales.append(nodo.nombre)
-                 
-         
+
+        self.afd.alfabeto = self.afnd.alfabeto
+        self.afd.nodosIniciales = "q" + str(self.afnd.inicio)
+        self.afd.nodosFinales = self.nodosFinales
+        
+        print("Nodos: ", self.afd.nodos)
+        print("Alfabeto: ", self.afd.alfabeto)
+        
+        print("Nodo inicial: ", self.afd.nodosIniciales)
+        print("Nodos finales: ", self.nodosFinales)
+        print("Transiciones: ", self.afd.transiciones)
+        
+        
+        
+        
+        
+                
+               
+                          
 """
 def convertir_afnd_a_afd(tabla_transiciones_afnd, estados_iniciales_afnd):
     estados_afd = set()
