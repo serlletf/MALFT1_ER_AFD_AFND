@@ -1,6 +1,7 @@
 from estructura import Th,Nodo
 from afd import crearAFD
 from visualizar import dibujar
+import sys
 
 
 th = Th()
@@ -206,8 +207,7 @@ def formalizarAFND():
 
 def main():
     global th
-    expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
-    
+    expresion = sys.argv[1]
     crearAFND(list(expresion))
     
     th.alfabeto = determinarAlfabeto(expresion)
