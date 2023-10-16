@@ -128,17 +128,13 @@ def operar(caracter):
         thompsonConcatenacion(caracter)
     if (operacion == '|'):
         thompsonO(caracter)
-    """ if (operacion == '*'):
-        thompsonKleene() 
-    if (operacion == '_'):
-       thompsonVacio() """
     operacion = ''    
     return
 
 
 #Primero debe analizar los parentesis, luego concatenación, despues el | y luego kleene
 
-def parsear(expresion):
+def crearAFND(expresion):
     
     global th,operacion
     #print("Asi va ",expresion, "Largo ", len(expresion))
@@ -146,7 +142,7 @@ def parsear(expresion):
     if(len(expresion) == 0):
         return 
     
-    parsear(expresion[:-1])
+    crearAFND(expresion[:-1])
     #print("De vuelta para procesar de izquierda a derecha ", expresion)
     
     #Va desde derecha a izquierda, para volver y operar recursivamente de izquierda a derecha
@@ -206,7 +202,8 @@ def formalizarAFND():
 def main():
     global th
     expresion = "a|b"
-    parsear(list(expresion))
+    crearAFND(list(expresion))
+    
     th.alfabeto = determinarAlfabeto(expresion)
     afnd = th.transiciones
 
