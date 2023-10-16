@@ -17,7 +17,7 @@ class crearAFD:
     def AFNDToAFD(self):
         self.armarUniones()
         nodosAFD,transicionesAlfabeto = self.crearTabla()
-        self.verTabla(nodosAFD,transicionesAlfabeto)
+        #self.verTabla(nodosAFD,transicionesAlfabeto)
         self.construirAFD(nodosAFD,transicionesAlfabeto)
         self.formalizar()
         
@@ -34,7 +34,7 @@ class crearAFD:
         
         for nodo in self.afnd.nodos:
             self.buscarTransicionesVacias(nodo)
-            print("Transiciones vacias del nodo ", nodo.nombre, " : ",  nodo.transicionesVacias)
+            #print("Transiciones vacias del nodo ", nodo.nombre, " : ",  nodo.transicionesVacias)
     
         
     def buscarTransicionesVacias(self,nodo):
@@ -85,16 +85,16 @@ class crearAFD:
         estados.append(inicio.nombre)
         for nodosTV in inicio.transicionesVacias:
             estados.append(nodosTV)
-        print("Esados ",estados)
+        #print("Estados ",estados)
         nodosAfd.append(estados.copy())
-        print("Nodos AFD ",nodosAfd)
-        print("Alfabeto", alfabeto)    
-        print("---------------------")
+        #print("Nodos AFD ",nodosAfd)
+        #print("Alfabeto", alfabeto)    
+        #print("---------------------")
         nodo = self.afnd.retornarNodo("q" + str(self.afnd.inicio))
         self.nodosArecorrer = estados.copy()
         self.buscarCaracterEnTransicionesVacias(nodo.uniones,"_")
 
-        print("Nuevos estados ",self.nuevosNodos)
+        #print("Nuevos estados ",self.nuevosNodos)
     
     
     
@@ -108,32 +108,30 @@ class crearAFD:
         
         print("---------------------")
         estados = []
-        print(matrizEstadosAlfabeto)
+        #print(matrizEstadosAlfabeto)
         for nodoAfd in nodosAfd:
-            print()
-            print("Nodo AFD ", nodoAfd)
+            #print()
+            #print("Nodo AFD ", nodoAfd)
             i = 0
             for caracter in alfabeto:
-                print()
-                print("Caracter: ", caracter)
+                #print("Caracter: ", caracter)
                 for nombreNodo in nodoAfd:
                     nodo = Nodo()
                     nodo = self.afnd.retornarNodo(nombreNodo)
-                    print("Buscando uniones con el caracter:", caracter , "en el nodo:",nodo.nombre)   
+                    #print("Buscando uniones con el caracter:", caracter , "en el nodo:",nodo.nombre)   
                     self.nodosArecorrer = nodoAfd.copy()
                     self.nuevosNodos = []
                     self.buscarCaracterEnTransicionesVacias(nodo.uniones,caracter)
-                    print("NUEVOS HERMOSOS NODOS: ", self.nuevosNodos)
+                    #print("NUEVOS HERMOSOS NODOS: ", self.nuevosNodos)
                     if ((self.nuevosNodos not in estados) and (self.nuevosNodos != [])):estados.append(self.nuevosNodos.copy())   
-                print("Lista auxiliar: ", estados)
-                print("Nodos AFD: ", nodosAfd)
+                #print("Lista auxiliar: ", estados)
+                #print("Nodos AFD: ", nodosAfd)
                 for nuevosNodosAfnd in estados :
                     if(nuevosNodosAfnd not in nodosAfd):
                         nodosAfd.append(nuevosNodosAfnd)
-                 
-                
+
                 #Guardar en formato matriz cada secuencia de nodos
-                print(i)
+                #print(i)
                 if(estados == []):
                     matrizEstadosAlfabeto[i].append("_")
                 else:
@@ -141,7 +139,7 @@ class crearAFD:
                 estados.clear()
                 i = i + 1
             
-        print("---------------")
+        #print("---------------")
         return nodosAfd,matrizEstadosAlfabeto
             
             
@@ -149,7 +147,7 @@ class crearAFD:
         alfabeto = self.afnd.alfabeto 
         for caracter in alfabeto:
                 fila = matrizEstadosAlfabeto[alfabeto.index(caracter)]
-                print("Columna de:", caracter)
+                #print("Columna de:", caracter)
                 for elemento in fila:
                     print("   ", elemento)
 
@@ -157,7 +155,7 @@ class crearAFD:
 
                                 
     def construirAFD(self,nodosAfd,matrizEstadosAlfabeto):
-        print("Comienza la creación del AFD \n")
+        #print("Comienza la creación del AFD \n")
 
         afd = self.afd
         alfabeto = self.afnd.alfabeto
@@ -203,8 +201,8 @@ class crearAFD:
                 
                 #print("Nodo origen: ", nodoOrigen.nombre, "Valor: ", valor, "Nodo destino: ", nodoDestino)
                 
-        print("Transiciones: ")       
-        print(afd.transiciones)
+        #print("Transiciones: ")       
+        #print(afd.transiciones)
         self.afn = afd
         self.transiciones = afd.transiciones
 

@@ -141,13 +141,13 @@ def operar(caracter):
 def parsear(expresion):
     
     global th,operacion
-    print("Asi va ",expresion, "Largo ", len(expresion))
+    #print("Asi va ",expresion, "Largo ", len(expresion))
     
     if(len(expresion) == 0):
         return 
     
     parsear(expresion[:-1])
-    print("De vuelta para procesar de izquierda a derecha ", expresion)
+    #print("De vuelta para procesar de izquierda a derecha ", expresion)
     
     #Va desde derecha a izquierda, para volver y operar recursivamente de izquierda a derecha
     caracter = expresion[len(expresion) - 1]
@@ -186,14 +186,23 @@ def toList(expresion):
         lista.append(caracter)
     return lista
 
-def visualizarAFND(afnd):
+def visualizar(afnd):
     vs = dibujar()
     vs.visualizar(afnd)
+
+def formalizarAFND():
+    global th
+    nodosNombre = []
+
+    for nodo in th.nodos:
+        nodosNombre.append(nodo.nombre)
+    print("AFND= \nK = " , nodosNombre)
+    print("\nΣ = " , th.alfabeto)
+    print("\ns = " , "q"+str(th.inicio))
+    print("\nf = " , "q"+str(th.final))
+    print("\nDelta = " , th.transiciones)
     
-def visualizarAFD(afd, nodosFinales):
-    vs = dibujar()
-    vs.visualizarAFD(afd, nodosFinales)
-    
+
 def main():
     global th
     expresion = "a|b"
@@ -201,17 +210,10 @@ def main():
     th.alfabeto = determinarAlfabeto(expresion)
     afnd = th.transiciones
 
-    print(afnd)
-    
     armarNodos()
-    visualizarAFND(afnd)
-    
-    
+    formalizarAFND()
+    visualizar(afnd)
+ 
     afd = crearAFD(th)
     afd.AFNDToAFD()
-
-    visualizarAFD(afd.transiciones, afd.nodosFinales)
-
-    
-    
 main()
