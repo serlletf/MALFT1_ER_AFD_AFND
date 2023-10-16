@@ -26,11 +26,16 @@ def es_expresion_regular_valida(expresion):
                 next_char = expresion[i + 1]
                 if prev_char in ['*', '|', '.'] or next_char in ['*', '|', '.']:
                     return False
+            elif char.isalpha():
+                next_char = None
+                if i < len(expresion) - 1:
+                    next_char = expresion[i + 1]
+                if next_char is not None and (next_char == '(' or next_char.isalpha()):
+                    return False
             i += 1
         return True
     else:
         return False
-    
     
 def construir_AFND(expresion):
     grafo = nx.DiGraph()
@@ -145,10 +150,6 @@ def main():
     #expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
     expresion = "a.b.c"
     if es_expresion_regular_valida(expresion):
-        #print("La expresión regular es válida.")
-        #print(construir_AFND(expresion))
-        #thompsonChar("a")
-        #generarMandala()
         testAFNDToAFD()
     else:
         print("La expresión regular no es válida.")
