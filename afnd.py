@@ -186,6 +186,11 @@ def visualizar(afnd):
     vs = dibujar()
     vs.visualizar(afnd)
 
+def visualizarAFD(afd, nodosFinales):
+    vs = dibujar()
+    vs.visualizarAFD(afd, nodosFinales)
+    
+
 def formalizarAFND():
     global th
     nodosNombre = []
@@ -201,7 +206,8 @@ def formalizarAFND():
 
 def main():
     global th
-    expresion = "a|b"
+    expresion = input("Ingrese una expresión regular (con a-z, A-Z, 0-9, ., |, *, (, ), ε, ∼, Φ): ")
+    
     crearAFND(list(expresion))
     
     th.alfabeto = determinarAlfabeto(expresion)
@@ -210,7 +216,10 @@ def main():
     armarNodos()
     formalizarAFND()
     visualizar(afnd)
+    
  
     afd = crearAFD(th)
     afd.AFNDToAFD()
+    visualizarAFD(afd.transiciones, afd.nodosFinales)
+
 main()
