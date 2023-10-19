@@ -30,6 +30,9 @@ class AFD:
     def __init__(self):
         self.nodos = []
         self.transiciones = []
+        self.alfabeto = []
+        self.nodosIniciales = []
+        self.nodosFinales = []
         
         
     def devolverNodoPorGrupo(self, grupo):

@@ -3,7 +3,7 @@ from estructura import Th,AFD,Nodo, NodoAFD
 
 class crearAFD:
     afnd = Th()
-    afn = AFD()
+    afd = AFD()
     nodosArecorrer = []
     nuevosNodos = []
 
@@ -24,7 +24,6 @@ class crearAFD:
         return
     
     def armarUniones(self):
-        uniones = [] 
         for nodo in self.afnd.nodos:
             for inicio, etiqueta, destino in self.afnd.transiciones:
                  if((nodo.nombre == inicio) and (destino not in nodo.uniones)):
@@ -34,7 +33,6 @@ class crearAFD:
         
         for nodo in self.afnd.nodos:
             self.buscarTransicionesVacias(nodo)
-            #print("Transiciones vacias del nodo ", nodo.nombre, " : ",  nodo.transicionesVacias)
     
         
     def buscarTransicionesVacias(self,nodo):
@@ -43,13 +41,11 @@ class crearAFD:
                 if(nodoUnido["valor"] == "_"):
                     #print("Transicion vacia con ", nodoUnido["nombre"])
                     nodo.transicionesVacias.append(nodoUnido["nombre"])
-                    #self.buscarTransicionesVacias(self.afnd.retornarNodo(nodoUnido["nombre"]))
                     
     def buscarCaracterEnTransicionesVacias(self,uniones,caracter):
         # uniones es un diccionario que contiene todas las uniones de un nodo en este formato{"nombre": destino, "valor" :etiqueta} 
         for union in uniones:
             if(union["valor"] == "_" or union["valor"] == caracter):
-                #print(union["nombre"], "Not in ", self.nodosArecorrer)
                 if(union["nombre"] not in self.nodosArecorrer):
                     self.nuevosNodos.append(union["nombre"])
                 nuevoNodoARecorrer = self.afnd.retornarNodo(union["nombre"])
@@ -85,16 +81,11 @@ class crearAFD:
         estados.append(inicio.nombre)
         for nodosTV in inicio.transicionesVacias:
             estados.append(nodosTV)
-        #print("Estados ",estados)
         nodosAfd.append(estados.copy())
-        #print("Nodos AFD ",nodosAfd)
-        #print("Alfabeto", alfabeto)    
-        #print("---------------------")
         nodo = self.afnd.retornarNodo("q" + str(self.afnd.inicio))
         self.nodosArecorrer = estados.copy()
         self.buscarCaracterEnTransicionesVacias(nodo.uniones,"_")
 
-        #print("Nuevos estados ",self.nuevosNodos)
     
     
     
@@ -106,7 +97,7 @@ class crearAFD:
         inicio =  self.afnd.retornarNodo("q" + str(self.afnd.inicio))
         matrizEstadosAlfabeto = [] """ #Matriz de estados del alfabeto
         
-        print("---------------------")
+        print("------------------------------------------------------------------------------------------------------------")
         estados = []
         #print(matrizEstadosAlfabeto)
         for nodoAfd in nodosAfd:
@@ -157,7 +148,7 @@ class crearAFD:
     def construirAFD(self,nodosAfd,matrizEstadosAlfabeto):
         #print("Comienza la creación del AFD \n")
 
-        afd = self.afn
+        afd = self.afd
         alfabeto = self.afnd.alfabeto
         #Crear nodos del AFD
         for nodoAfd in nodosAfd:
@@ -170,28 +161,14 @@ class crearAFD:
                 nodo.esFinal = True
             afd.nodos.append(nodo)
             
-        #print(matrizEstadosAlfabeto)
-        
-        """ for nodos in afd.nodos:
-            print("Nombre",nodos.nombre)
-            print("Grupo" ,nodos.grupoNodos)   """
-
-        #for filaTransicion in matrizEstadosAlfabeto:
         for i in range(len(matrizEstadosAlfabeto)):
-            #indexEnAlfabeto = matrizEstadosAlfabeto.index(filaTransicion)
             filaTransicionI= matrizEstadosAlfabeto[i]
-            #for nodosEnFila in filaTransicion:
             for j in range(len(filaTransicionI)):
                 nodosEnFilaJ = filaTransicionI[j]
-                #print("nodos en fila j"  ,nodosEnFilaJ)
-                
                 nodoOrigen = afd.nodos[j]
-                #print("Nodo origen: ", nodoOrigen.nombre)
-
                 nodoDestino = afd.devolverNodoPorGrupo(nodosEnFilaJ)
                 #Sumidero
                 if(nodoDestino == None):
-                    #print("Pal sumidero")
                     nodoDestino = "Sumidero"
                 else:
                     nodoDestino = nodoDestino.nombre
@@ -206,44 +183,28 @@ class crearAFD:
         self.afn = afd
         self.transiciones = afd.transiciones
 
+    def sumidero(self):
+        for caracter in self.afn.alfabeto:
+            self.afn.transiciones.append(("Sumidero",caracter,"Sumidero")) 
+         
     def formalizar(self):
+        #Formalizar de nodos finales
         for nodo in self.afn.nodos:
             if(nodo.esFinal):
                 self.nodosFinales.append(nodo.nombre)
-                 
-         
-"""
-def convertir_afnd_a_afd(tabla_transiciones_afnd, estados_iniciales_afnd):
-    estados_afd = set()
-    estados_afd.add(estados_iniciales_afnd)
-    alfabeto_afd = set()
-    transiciones_afd = {}
 
-    # Construir el conjunto de estados iniciales del AFD
-    # Puedes tener múltiples estados iniciales en el AFND, así que comienza con el conjunto de estados iniciales
+        self.afd.alfabeto = self.afnd.alfabeto
+        self.afd.nodosIniciales = "q" + str(self.afnd.inicio)
+        self.afd.nodosFinales = self.nodosFinales
+        nodosNombre = []
 
-    # Construir el alfabeto del AFD
-    for estado, transiciones in tabla_transiciones_afnd.items():
-        alfabeto_afd.update(transiciones.keys())
-
-    # Inicializar una cola para procesar conjuntos de estados
-    cola = [estados_iniciales_afnd]
-
-    # Procesar los conjuntos de estados
-    while cola:
-        conjunto_actual = cola.pop(0)
-        estados_afd.add(conjunto_actual)
-        transiciones_afd[conjunto_actual] = {}
-
-        for simbolo in alfabeto_afd:
-            destino = set()
-            for estado in conjunto_actual:
-                if simbolo in tabla_transiciones_afnd[estado]:
-                    destino.update(tabla_transiciones_afnd[estado][simbolo])
-            if destino:
-                transiciones_afd[conjunto_actual][simbolo] = destino
-                if destino not in estados_afd:
-                    cola.append(destino)
-
-    return estados_afd, alfabeto_afd, transiciones_afd
- """
+        for nodo in self.afd.nodos:
+            nodosNombre.append(nodo.nombre)
+                    
+        print("AFD M= \nK = " , nodosNombre)
+        print("\nSigma = " , self.afd.alfabeto)
+        print("\nDelta = " , self.afd.transiciones)
+        print("\nS = " , self.afd.nodosIniciales)
+        print("\nF = " , self.nodosFinales)
+    
+        
